@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">ZCRMCPApp</string>
+
+    <!--ZCRMCP-->
+    <!--<string name="c_id">1000.78H4EVVRH05V76332CDKZGQOMYOKBR</string>-->
+    <!--<string name="c_secret">817a28d3ac90cd6b3b84f31958ae71533e3b0949ad</string>-->
+    <!--<string name="accounts_url">https://accounts.zoho.com</string>-->
+
+    <!--<string name="url_scheme">studiopartner</string>-->
+    <!--<string name="redir_url">studiopartner://</string>-->
+
+    <!--//VijayKrishna Localzoho Acc-->
+
+    <!--<string name="c_id">1001757695.JK6YDOZ3N2HP74463BC21A6TD5FORH</string>-->
+    <!--<string name="c_secret">1586461518e0579b2c67c667275122ea320f2ec6b5</string>-->
+    <!--<string name="accounts_url">https://accounts.localzohoportal.com</string>-->
+
+    <string name="url_scheme">zcrmcp</string>
+    <string name="redir_url">zcrmcp://</string>
+
+    <string name="iam_portal_url">https://accounts.localzohoportal.com</string>
+
+</resources>
