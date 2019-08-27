@@ -35,7 +35,7 @@ dependencies {
     implementation 'com.zoho.accounts.android:zaccountsclientportalsdk:V1_0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 
-    implementation(name: 'sdk1', ext: 'aar') {
+    implementation(name: 'sdk2', ext: 'aar') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
 

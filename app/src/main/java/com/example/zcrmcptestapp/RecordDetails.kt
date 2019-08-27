@@ -21,7 +21,7 @@ import com.zoho.crm.sdk.android.setup.sdkUtil.ZCRMSDKUtil
 
 class RecordDetails : Activity() {
 
-    private lateinit var recyclerViewLayout: LinearLayout
+    private lateinit var viewLayout: LinearLayout
     private lateinit var scrollView: ScrollView
     private lateinit var llParams: LinearLayout.LayoutParams
     private lateinit var viewParams: LinearLayout.LayoutParams
@@ -52,8 +52,8 @@ class RecordDetails : Activity() {
         scrollView = ScrollView(this)
         scrollView.layoutParams =
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        recyclerViewLayout = LinearLayout(this)
-        recyclerViewLayout.orientation = LinearLayout.VERTICAL
+        viewLayout = LinearLayout(this)
+        viewLayout.orientation = LinearLayout.VERTICAL
 
         llParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         viewParams = LinearLayout.LayoutParams(width / 4, 50)
@@ -70,16 +70,16 @@ class RecordDetails : Activity() {
         toolbar.popupTheme = R.style.AppTheme
         toolbar.visibility = View.VISIBLE
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        toolbar.title = "My ${RecordData.module}"
+        toolbar.title = "My ${AppData.module}"
         toolbar.setTitleTextColor(Color.WHITE)
         toolbar.setNavigationOnClickListener { finish() }
         mainLayout.addView(toolbar, 0)
-        RecordData.record?.apply { this@RecordDetails.record = this }
+        AppData.record?.apply { this@RecordDetails.record = this }
 
         setDetails()
 
-        recyclerViewLayout.setPadding(20, 0, 0, 0)
-        scrollView.addView(recyclerViewLayout)
+        viewLayout.setPadding(20, 0, 0, 0)
+        scrollView.addView(viewLayout)
         mainLayout.addView(scrollView)
         setContentView(mainLayout)
     }
@@ -132,7 +132,7 @@ class RecordDetails : Activity() {
         header.gravity = Gravity.START
 
         linearLayout.addView(header)
-        recyclerViewLayout.addView(linearLayout)
+        viewLayout.addView(linearLayout)
     }
 
     private fun setField() {
@@ -166,17 +166,10 @@ class RecordDetails : Activity() {
             linearLayout.addView(fieldTxt)
             linearLayout.addView(valueTxt)
 
-            recyclerViewLayout.addView(linearLayout)
+            viewLayout.addView(linearLayout)
 
         }
 
-    }
-
-    private fun setImageView() {
-        val imageView = ImageView(this)
-        imageView.layoutParams = LinearLayout.LayoutParams(width / 4, 150)
-        imageView.setBackgroundResource(R.drawable.noimage)
-        recyclerViewLayout.addView(imageView, LinearLayout.LayoutParams(width / 4, 150))
     }
 
     private fun setProductDetails() {
@@ -246,7 +239,7 @@ class RecordDetails : Activity() {
         scrollView2.setPadding(0, 10, 0, 0)
 
         scrollView2.addView(layout)
-        recyclerViewLayout.addView(scrollView2)
+        viewLayout.addView(scrollView2)
 
     }
 

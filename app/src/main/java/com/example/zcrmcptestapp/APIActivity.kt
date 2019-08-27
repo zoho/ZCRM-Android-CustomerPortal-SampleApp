@@ -10,17 +10,20 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.zoho.crm.sdk.android.authorization.ZCRMSDKClient
 import com.example.zcrmcpapp.R
+import com.zoho.crm.sdk.android.authorization.ZCRMSDKClient
 import com.zoho.crm.sdk.android.api.handler.DataCallback
 import com.zoho.crm.sdk.android.api.response.BulkAPIResponse
 import com.zoho.crm.sdk.android.api.response.FileAPIResponse
+import com.zoho.crm.sdk.android.common.NullableJSONObject
 import com.zoho.crm.sdk.android.crud.ZCRMQuery
 import com.zoho.crm.sdk.android.crud.ZCRMRecord
 import com.zoho.crm.sdk.android.exception.ZCRMException
 import com.zoho.crm.sdk.android.setup.sdkUtil.ZCRMSDKUtil
 import java.io.BufferedInputStream
 import java.io.InputStream
+import org.json.JSONObject
+
 
 class APIActivity : Activity() {
 
@@ -30,6 +33,8 @@ class APIActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        jsonTest()
 
         val display = windowManager.defaultDisplay
         val size = Point()
@@ -256,5 +261,30 @@ class APIActivity : Activity() {
         val intent = Intent(applicationContext, ListActivity::class.java)
         intent.putExtra("Module", "Cases")
         startActivity(intent)
+    }
+
+    private fun jsonTest() {
+//        val d = 12.00
+//        val e = 10
+
+        val pref = applicationContext.getSharedPreferences("MyPref", 0) // 0 - for private mode
+        val editor = pref.edit()
+        editor.putString("json", "{ \"id1\": \"12.00\", \"id2\": 11, \"id3\": 5 }") // Storing string
+        editor.apply() // commit changes
+
+        val str = pref.getString("json", String()) // getting String
+        println("<<< STRA ${str}")
+
+        val jsonObj = JSONObject(str)
+        println("<<< JSON ${jsonObj.toString()}")
+
+        println("${jsonObj.get("id1").javaClass.name} + ${jsonObj.get("id1")}")
+        println("${jsonObj.get("id2").javaClass.name} + ${jsonObj.get("id2")}")
+        println("${jsonObj.get("id3").javaClass.name} + ${jsonObj.get("id3")}")
+
+        val nullJson = NullableJSONObject(jsonObj)
+        println("${nullJson.get("id1")!!.javaClass.name} + ${nullJson.get("id1")}")
+        println("${nullJson.get("id2")!!.javaClass.name} + ${nullJson.get("id2")}")
+        println("${nullJson.get("id3")!!.javaClass.name} + ${nullJson.get("id3")}")
     }
 }
