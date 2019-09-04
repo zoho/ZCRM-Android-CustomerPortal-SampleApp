@@ -115,7 +115,12 @@ class RecordDetails : Activity() {
                 }
 
                 override fun failed(exception: ZCRMException) {
-                    throw exception
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@RecordDetails, exception.getErrorMsg(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             })
     }

@@ -24,6 +24,7 @@ import com.zoho.crm.sdk.android.crud.ZCRMQuery
 import com.zoho.crm.sdk.android.crud.ZCRMRecord
 import com.zoho.crm.sdk.android.exception.ZCRMException
 import com.zoho.crm.sdk.android.setup.sdkUtil.ZCRMSDKUtil
+import android.widget.Toast
 
 class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
 
@@ -165,7 +166,7 @@ class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
         search.hint = "Enter search keyword..."
         search.setBackgroundResource(android.R.color.transparent)
         search.textSize = 20F
-        search.setHintTextColor(Color.WHITE)
+        search.setHintTextColor(Color.LTGRAY)
         search.setTextColor(Color.WHITE)
         search.setPadding(0, 30, 0, 0)
         search.setSingleLine()
@@ -246,7 +247,13 @@ class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
             }
 
             override fun failed(exception: ZCRMException) {
-                throw exception
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        this@ListActivity, exception.getErrorMsg(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         })
     }
@@ -275,7 +282,13 @@ class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
             }
 
             override fun failed(exception: ZCRMException) {
-                throw exception
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        this@ListActivity, exception.getErrorMsg(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         })
 

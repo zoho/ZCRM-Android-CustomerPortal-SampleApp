@@ -31,14 +31,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     api 'com.android.support:recyclerview-v7:28.0.0'
-
     implementation 'com.zoho.accounts.android:zaccountsclientportalsdk:V1_0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
-
-    implementation(name: 'sdk2', ext: 'aar') {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }
-
-//    implementation('com.zoho.crm:android-sdk:1.1.1')
-
+    implementation('com.zoho.crm:android-sdk:1.1.3')
 }
