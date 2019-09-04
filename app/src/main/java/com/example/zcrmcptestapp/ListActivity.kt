@@ -231,7 +231,6 @@ class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
                     recs.forEach { record -> searchedRecords.add(record) }
 
                     if (this@ListActivity.list2Page == 1) {
-                        println("<<< HI")
                         linearLayout.removeView(recyclerView)
                         setListView(searchedRecords)
                     }
@@ -315,7 +314,6 @@ class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
 
                 if (!isSearchRecords) {
                     getRecordsResponse?.info?.apply {
-                        println("<<< More recs - ${this.moreRecords}")
                         when {
                             this.moreRecords -> {
                                 this@ListActivity.list1Page++
@@ -325,7 +323,6 @@ class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
                     }
                 } else {
                     searchRecordsResponse?.info?.apply {
-                        println("<<< More recs search - ${this.moreRecords}")
                         when {
                             this.moreRecords -> {
                                 this@ListActivity.list2Page++
@@ -342,8 +339,6 @@ class ListActivity : Activity(), RecyclerViewAdapter.OnItemClickListener {
     private fun resizeRecyclerView() {
         adapter.setOnBottomReachedListener(object : RecyclerViewAdapter.OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
-                println("<<< Reached Bottom ")
-
                 var resizeRecyclerView = false
                 when {
                     isSearchRecords -> searchRecordsResponse?.info?.apply {

@@ -90,8 +90,6 @@ class RecordDetails : Activity() {
                 override fun completed(response: BulkAPIResponse, layouts: List<ZCRMLayout>) {
 
                     val sections = layouts[0].sections
-                    println("<<< sec ${sections.size}")
-
                     sections.forEach { section ->
                         runOnUiThread {
                             when {
@@ -108,7 +106,6 @@ class RecordDetails : Activity() {
                                     }
                                 }
                             }
-                            println("<<< fields ${fields.size}")
                         }
                     }
 

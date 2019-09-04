@@ -68,7 +68,6 @@ class RecyclerViewAdapter internal constructor() : RecyclerView.Adapter<Recycler
                 loadDataListener?.loadData(position)
             }
 
-            println("<<<< $position -- ${names.size}")
             if (position == names.size-1) {
                 onBottomReachedListener?.onBottomReached(position)
             }

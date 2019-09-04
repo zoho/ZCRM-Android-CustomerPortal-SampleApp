@@ -19,6 +19,7 @@ import com.zoho.crm.sdk.android.common.NullableJSONObject
 import com.zoho.crm.sdk.android.crud.ZCRMQuery
 import com.zoho.crm.sdk.android.crud.ZCRMRecord
 import com.zoho.crm.sdk.android.exception.ZCRMException
+import com.zoho.crm.sdk.android.exception.ZCRMLogger
 import com.zoho.crm.sdk.android.setup.sdkUtil.ZCRMSDKUtil
 import java.io.BufferedInputStream
 import java.io.InputStream
@@ -75,11 +76,11 @@ class APIActivity : Activity() {
             val sdk = ZCRMSDKClient.getInstance(applicationContext)
             sdk.logout(object : ZCRMSDKClient.Companion.ZCRMLogoutCallback {
                 override fun onFailed() {
-                    println(">> logout failed")
+                    ZCRMLogger.logError(">> logout failed")
                 }
 
                 override fun onSuccess() {
-                    println(">> logout success")
+                    ZCRMLogger.logInfo(">> logout success")
                     startActivity(Intent(applicationContext, MainActivity::class.java))
                 }
             })

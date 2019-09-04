@@ -8,6 +8,7 @@ import com.zoho.crm.sdk.android.authorization.ZCRMSDKClient
 import com.zoho.crm.sdk.android.common.CommonUtil
 import com.zoho.crm.sdk.android.configuration.ZCRMSDKConfigs
 import com.zoho.crm.sdk.android.exception.ZCRMException
+import com.zoho.crm.sdk.android.exception.ZCRMLogger
 import java.util.logging.Level
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +33,12 @@ class MainActivity : AppCompatActivity() {
         configs.customerPortalName = "testportal55"
         sdk.init(configs, object : ZCRMSDKClient.Companion.ZCRMInitCallback {
             override fun onFailed(ex: ZCRMException) {
-                println("> Login failed - " + ex)
+                ZCRMLogger.logError("> Login failed - " + ex)
             }
 
             override fun onSuccess() {
-                println("> Login success")
+                ZCRMLogger.logInfo("> Login success")
                 configs.setLoggingPreferences(Level.INFO, true)
-                println("<<< CALLED")
                 startActivity(Intent(applicationContext, APIActivity::class.java))
             }
         })
