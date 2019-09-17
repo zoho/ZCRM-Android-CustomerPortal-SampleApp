@@ -14,7 +14,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:replace="android:allowBackup">
-        <activity android:name="com.example.zcrmcptestapp.RecordDetails">
+        <activity
+                android:noHistory="false"
+                android:name="com.example.zcrmcptestapp.RecordDetails">
         </activity>
         <activity android:name="com.example.zcrmcptestapp.ListActivity">
         </activity>

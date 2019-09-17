@@ -1,13 +1,14 @@
 package com.example.zcrmcptestapp
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.graphics.Color
 import android.graphics.Point
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import com.example.zcrmcpapp.R
 import com.zoho.crm.sdk.android.api.handler.DataCallback
@@ -18,11 +19,20 @@ import com.zoho.crm.sdk.android.crud.ZCRMRecord
 import com.zoho.crm.sdk.android.crud.ZCRMRecordDelegate
 import com.zoho.crm.sdk.android.exception.ZCRMException
 import com.zoho.crm.sdk.android.setup.sdkUtil.ZCRMSDKUtil
+import android.view.MotionEvent
+import android.view.View.OnTouchListener
+import android.widget.TextView
+import android.widget.ImageButton
+import android.widget.CheckBox
+import android.support.v4.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.widget.LinearLayout
 
 class RecordDetails : Activity() {
 
     private lateinit var viewLayout: LinearLayout
     private lateinit var scrollView: ScrollView
+    private lateinit var scrollView2: HorizontalScrollView
     private lateinit var llParams: LinearLayout.LayoutParams
     private lateinit var viewParams: LinearLayout.LayoutParams
     private lateinit var txtParams: LinearLayout.LayoutParams
@@ -31,7 +41,11 @@ class RecordDetails : Activity() {
     private lateinit var field: ZCRMField
     private lateinit var fields: ArrayList<ZCRMField>
     private lateinit var record: ZCRMRecord
-    private lateinit var gridLayout: GridLayout
+    private var gridLayout: GridLayout? = null
+    private lateinit var tableLayout: TableLayout
+
+    var mx = 0F
+    var my = 0F
     private var aggregateNames = arrayListOf(
         Pair("Sub_Total", "Sub Total"),
         Pair("Discount", "Discount"),
@@ -39,6 +53,7 @@ class RecordDetails : Activity() {
         Pair("Adjustment", "Adjustment"),
         Pair("Grand_Total", "Grand Total")
     )
+    private var flag = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +96,7 @@ class RecordDetails : Activity() {
         viewLayout.setPadding(20, 0, 0, 0)
         scrollView.addView(viewLayout)
         mainLayout.addView(scrollView)
+        flag = 1
         setContentView(mainLayout)
     }
 
@@ -178,10 +194,13 @@ class RecordDetails : Activity() {
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
 
-        gridLayout = GridLayout(this)
-        gridLayout.alignmentMode = GridLayout.ALIGN_BOUNDS
-        gridLayout.columnCount = 8
-        gridLayout.rowCount = 1
+//        gridLayout = GridLayout(this)
+////        gridLayout?.alignmentMode = GridLayout.ALIGN_MARGINS
+//        gridLayout?.columnCount = 8
+//        gridLayout?.rowCount = 1
+
+        tableLayout = TableLayout(this)
+        tableLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
         var cellValue = arrayListOf<String?>()
         cellValue.add("S.No")
@@ -193,7 +212,7 @@ class RecordDetails : Activity() {
         cellValue.add("Tax (Rs.)")
         cellValue.add("Total (Rs.)")
 
-        setRow(cellValue)
+        setRow(cellValue, true)
 
         record.lineItems?.apply {
             (0 until this.size).forEach { it ->
@@ -232,10 +251,10 @@ class RecordDetails : Activity() {
 
         aggregateSubLayout.addView(aggregateLayout)
 
-        layout.addView(gridLayout)
+        layout.addView(tableLayout)
         layout.addView(aggregateSubLayout)
 
-        val scrollView2 = HorizontalScrollView(this)
+        scrollView2 = HorizontalScrollView(this)
         scrollView2.layoutParams =
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         scrollView2.setPadding(0, 10, 0, 0)
@@ -244,6 +263,81 @@ class RecordDetails : Activity() {
         viewLayout.addView(scrollView2)
 
     }
+
+//    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//        println("<<< HI")
+//        val curX: Float
+//        val curY: Float
+//
+//        when (event.action) {
+//
+//            MotionEvent.ACTION_DOWN -> {
+//                println("<<< ACTION DOWN")
+//                mx = event.getX()
+//                my = event.getY()
+//            }
+//            MotionEvent.ACTION_MOVE -> {
+//
+//                val x2 = event.rawX
+//                val y2 = event.rawY
+//
+//                scrollView.smoothScrollBy((mx - x2).toInt(), (my - y2).toInt())
+//                scrollView2.smoothScrollBy((mx - x2).toInt(), (my - y2).toInt())
+//
+//
+////                val l1 = ObjectAnimator.ofInt(scrollView, "scrollY",  (my - y2).toInt()).setDuration(500)
+////                l1.addUpdateListener { animation ->
+////                    println("<<< ON UPDATION")
+////                    val scrollTo = animation.animatedValue as Int
+////                    scrollView.scrollTo(0, scrollTo)
+////                }
+////
+////                val l2 = ObjectAnimator.ofInt(scrollView, "scrollX",  (mx - x2).toInt()).setDuration(500)
+////                l2.addUpdateListener { animation ->
+////                    val scrollTo = animation.animatedValue as Int
+////                    scrollView.scrollTo(scrollTo, 0)
+////                }
+//
+////                val l3 = ObjectAnimator.ofInt(scrollView, "scrollY",  (my - y2).toInt()).setDuration(500)
+////                l3.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
+////                    override fun onAnimationUpdate(animation: ValueAnimator) {
+////                        val scrollTo = animation.animatedValue as Int
+////                        scrollView.scrollTo(0, scrollTo)
+////                    }
+////                })
+////
+////                val l4 = ObjectAnimator.ofInt(scrollView, "scrollY",  (my - y2).toInt()).setDuration(500)
+////                l4.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
+////                    override fun onAnimationUpdate(animation: ValueAnimator) {
+////                        val scrollTo = animation.animatedValue as Int
+////                        scrollView.scrollTo(0, scrollTo)
+////                    }
+////                })
+//
+////                ObjectAnimator.ofInt(scrollView, "scrollY",  (my - y2).toInt()).setDuration(500).start()
+////                ObjectAnimator.ofInt(scrollView, "scrollX",  (mx - x2).toInt()).setDuration(500).start()
+////
+////                ObjectAnimator.ofInt(scrollView2, "scrollY",  (my - y2).toInt()).setDuration(500).start()
+////                ObjectAnimator.ofInt(scrollView2, "scrollX",  (mx - x2).toInt()).setDuration(500).start()
+//
+//
+//                mx = x2
+//                my = y2
+//
+//            }
+//            MotionEvent.ACTION_UP -> {
+////                println("<<< ACTION UP")
+////
+////                curX = event.getX()
+////                curY = event.getY()
+////                scrollView.scrollBy((mx - curX).toInt(), (my - curY).toInt())
+////                scrollView2.scrollBy((mx - curX).toInt(), (my - curY).toInt())
+//            }
+//        }
+//
+//        return false
+//
+//    }
 
     private fun getAggregateValue(field: Pair<String, String>): LinearLayout {
         val col7 = "Tax (Rs.)"
@@ -260,7 +354,6 @@ class RecordDetails : Activity() {
         fieldTxt.gravity = Gravity.CENTER
         fieldTxt.setTextColor(Color.GRAY)
 
-
         val valueTxt = TextView(this)
         valueTxt.layoutParams = LinearLayout.LayoutParams((col8.length) * width / 25, height / 20)
         valueTxt.text = record.getFieldValue(field.first).toString()
@@ -275,11 +368,13 @@ class RecordDetails : Activity() {
         return linearLayout
     }
 
-    private fun setRow(cellValue: ArrayList<String?>) {
+    private fun setRow(cellValue: ArrayList<String?>, isBold: Boolean = false) {
 
-        val border = GradientDrawable()
-        border.setColor(Color.WHITE)
-        border.setStroke(1, Color.BLACK)
+        val row = TableRow(this)
+        val rowLp = TableRow.LayoutParams(
+            TableLayout.LayoutParams.MATCH_PARENT,
+            TableLayout.LayoutParams.WRAP_CONTENT)
+        row.layoutParams = rowLp
 
         val col1 = "S.No"
         val col2 = "Product Details"
@@ -294,98 +389,125 @@ class RecordDetails : Activity() {
         sNo.gravity = Gravity.CENTER
         sNo.text = cellValue[0]
         sNo.setTextColor(Color.BLACK)
+        if (isBold) { sNo.setTypeface(null, Typeface.BOLD) }
+        sNo.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val sNoView = LinearLayout(this)
         sNoView.orientation = LinearLayout.VERTICAL
         sNoView.gravity = Gravity.CENTER
-        sNoView.layoutParams = LinearLayout.LayoutParams((col1.length) * width / 25, 120)
+        sNoView.layoutParams = TableRow.LayoutParams((col1.length) * width / 25, 120)
         sNoView.addView(sNo)
-        sNoView.background = border
+        sNoView.setBackgroundResource(R.drawable.border)
 
         val productDetails = TextView(this)
         productDetails.text = cellValue[1]
         productDetails.gravity = Gravity.CENTER
         productDetails.setTextColor(Color.BLACK)
+        if (isBold) { productDetails.setTypeface(null, Typeface.BOLD) }
+        productDetails.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val productDetailsView = LinearLayout(this)
         productDetailsView.orientation = LinearLayout.VERTICAL
         productDetailsView.gravity = Gravity.CENTER
-        productDetailsView.layoutParams = LinearLayout.LayoutParams((col2.length) * width / 25, 120)
+        productDetailsView.layoutParams = TableRow.LayoutParams((col2.length) * width / 25, 120)
         productDetailsView.addView(productDetails)
-        productDetailsView.background = border
+        productDetailsView.setBackgroundResource(R.drawable.border)
 
         val listPrice = TextView(this)
         listPrice.text = cellValue[2]
         listPrice.gravity = Gravity.CENTER
         listPrice.setTextColor(Color.BLACK)
+        if (isBold) { listPrice.setTypeface(null, Typeface.BOLD) }
+        listPrice.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val listPriceView = LinearLayout(this)
         listPriceView.orientation = LinearLayout.VERTICAL
         listPriceView.gravity = Gravity.CENTER
-        listPriceView.layoutParams = LinearLayout.LayoutParams((col3.length) * width / 25, 120)
+        listPriceView.layoutParams = TableRow.LayoutParams((col3.length) * width / 25, 120)
         listPriceView.addView(listPrice)
-        listPriceView.background = border
+        listPriceView.setBackgroundResource(R.drawable.border)
 
         val qty = TextView(this)
         qty.text = cellValue[3]
         qty.gravity = Gravity.CENTER
         qty.setTextColor(Color.BLACK)
+        if (isBold) { qty.setTypeface(null, Typeface.BOLD) }
+        qty.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val qtyView = LinearLayout(this)
         qtyView.orientation = LinearLayout.VERTICAL
         qtyView.gravity = Gravity.CENTER
-        qtyView.layoutParams = LinearLayout.LayoutParams((col4.length) * width / 25, 120)
+        qtyView.layoutParams = TableRow.LayoutParams((col4.length) * width / 25, 120)
         qtyView.addView(qty)
-        qtyView.background = border
+        qtyView.setBackgroundResource(R.drawable.border)
 
         val amt = TextView(this)
         amt.text = cellValue[4]
         amt.gravity = Gravity.CENTER
         amt.setTextColor(Color.BLACK)
+        if (isBold) { amt.setTypeface(null, Typeface.BOLD) }
+        amt.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val amtView = LinearLayout(this)
         amtView.orientation = LinearLayout.VERTICAL
         amtView.gravity = Gravity.CENTER
-        amtView.layoutParams = LinearLayout.LayoutParams((col5.length) * width / 25, 120)
+        amtView.layoutParams = TableRow.LayoutParams((col5.length) * width / 25, 120)
         amtView.addView(amt)
-        amtView.background = border
+        amtView.setBackgroundResource(R.drawable.border)
 
         val discount = TextView(this)
         discount.text = cellValue[5]
         discount.gravity = Gravity.CENTER
         discount.setTextColor(Color.BLACK)
+        if (isBold) { discount.setTypeface(null, Typeface.BOLD) }
+        discount.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val discountView = LinearLayout(this)
         discountView.orientation = LinearLayout.VERTICAL
         discountView.gravity = Gravity.CENTER
-        discountView.layoutParams = LinearLayout.LayoutParams((col6.length) * width / 25, 120)
+        discountView.layoutParams = TableRow.LayoutParams((col6.length) * width / 25, 120)
         discountView.addView(discount)
-        discountView.background = border
+        discountView.setBackgroundResource(R.drawable.border)
 
         val tax = TextView(this)
         tax.text = cellValue[6]
         tax.gravity = Gravity.CENTER
         tax.setTextColor(Color.BLACK)
+        if (isBold) { tax.setTypeface(null, Typeface.BOLD) }
+        tax.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val taxView = LinearLayout(this)
         taxView.orientation = LinearLayout.VERTICAL
         taxView.gravity = Gravity.CENTER
-        taxView.layoutParams = LinearLayout.LayoutParams((col7.length) * width / 25, 120)
+        taxView.layoutParams = TableRow.LayoutParams((col7.length) * width / 25, 120)
         taxView.addView(tax)
-        taxView.background = border
+        taxView.setBackgroundResource(R.drawable.border)
 
         val total = TextView(this)
         total.text = cellValue[7]
         total.gravity = Gravity.CENTER
         total.setTextColor(Color.BLACK)
+        if (isBold) { total.setTypeface(null, Typeface.BOLD) }
+        total.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         val totalView = LinearLayout(this)
         totalView.orientation = LinearLayout.VERTICAL
         totalView.gravity = Gravity.CENTER
-        totalView.layoutParams = LinearLayout.LayoutParams((col8.length) * width / 25, 120)
+        totalView.layoutParams = TableRow.LayoutParams((col8.length) * width / 25, 120)
         totalView.addView(total)
-        totalView.background = border
+        totalView.setBackgroundResource(R.drawable.border)
 
-        gridLayout.addView(sNoView)
-        gridLayout.addView(productDetailsView)
-        gridLayout.addView(listPriceView)
-        gridLayout.addView(qtyView)
-        gridLayout.addView(amtView)
-        gridLayout.addView(discountView)
-        gridLayout.addView(taxView)
-        gridLayout.addView(totalView)
+//        gridLayout?.addView(sNoView)
+//        gridLayout?.addView(productDetailsView)
+//        gridLayout?.addView(listPriceView)
+//        gridLayout?.addView(qtyView)
+//        gridLayout?.addView(amtView)
+//        gridLayout?.addView(discountView)
+//        gridLayout?.addView(taxView)
+//        gridLayout?.addView(totalView)
+
+        row.addView(sNoView)
+        row.addView(productDetailsView)
+        row.addView(listPriceView)
+        row.addView(qtyView)
+        row.addView(amtView)
+        row.addView(discountView)
+        row.addView(taxView)
+        row.addView(totalView)
+
+        tableLayout.addView(row)
 
     }
 }
